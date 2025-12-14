@@ -1,0 +1,30 @@
+import mysql.connector
+
+# Replace with your connection details
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="leunamme5002$",
+    database='test_db'
+)
+mycursor = mydb.cursor()
+
+
+# Create error to handle db already exist
+class DatabaseAlreadyExist(Exception):
+    def __init__(self, name):
+        self.name = name
+    def __str__(self):
+        return f'{self.name} has already been created'
+
+mycursor.execute("SHOW DATABASES")
+
+db = 'alx_book_store'
+databases = [db[0] for db in mycursor.fetchall()]
+
+
+if db in databases:
+    raise DatabaseAlreadyExist(db)
+else:
+    mycursor.execute("CREATE DATABASE alx_book_store")
+    print('DataBase created successfully!')
