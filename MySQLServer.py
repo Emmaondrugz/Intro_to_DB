@@ -4,8 +4,7 @@ import mysql.connector
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="leunamme5002$",
-    database='test_db'
+    password="leunamme5002$"
 )
 mycursor = mydb.cursor()
 
@@ -20,11 +19,12 @@ class DatabaseAlreadyExist(Exception):
 mycursor.execute("SHOW DATABASES")
 
 db = 'alx_book_store'
-databases = [db[0] for db in mycursor.fetchall()]
 
+# Extract database names from tuples
+databases = [database[0] for database in mycursor.fetchall()]
 
 if db in databases:
     raise DatabaseAlreadyExist(db)
 else:
-    mycursor.execute("CREATE DATABASE alx_book_store")
-    print('DataBase created successfully!')
+    mycursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store")
+    print('Database created successfully!')
